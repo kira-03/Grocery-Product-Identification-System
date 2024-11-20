@@ -1,4 +1,4 @@
-# Full-Stack Image-Based Grocery Product Identification System
+# Full-Stack Grocery Product Classifier
 
 This project serves as a **base model** for an image-based grocery product identification system. It leverages pre-trained **TensorFlow models** (ResNet50, MobileNetV2, and DenseNet169) to classify images of grocery products with high accuracy. We developed this base model out of our interest and fascination with concepts like **Amazon Go** and other automated systems. Our goal was to explore the potential of integrating computer vision and machine learning into real-world applications like automatic stock refilling and seamless payments.
 
