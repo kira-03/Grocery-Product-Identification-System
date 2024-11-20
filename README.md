@@ -33,7 +33,7 @@ This project serves as a **base model** for an image-based grocery product ident
 3. **Frontend Setup (React)**:
    - Navigate to the frontend directory and install dependencies:
      ```bash
-     cd frontend
+     cd my-classification-app
      npm install
      ```
    - Start the React application:
