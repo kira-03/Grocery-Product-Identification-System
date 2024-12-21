@@ -29,7 +29,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # File paths
-base_path = r"D:\Github Repos\Grocery-Products-Identification\fast api\models"
+base_path = r"D:\Github Repos\Grocery-Product-Identification-System\fast api\models"
+
 
 
 model_paths = {

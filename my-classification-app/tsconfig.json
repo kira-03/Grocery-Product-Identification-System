@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2015", // Ensure the target is set to ES2015 or higher
+    "target": "ES2015", 
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -11,16 +11,12 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve", // or "react-jsx" for React 17+
+    "jsx": "preserve",
     "incremental": true,
-    "downlevelIteration": true, // Optional: enable this if you want to support lower targets
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
+    "downlevelIteration": true,
+    "baseUrl": ".",  // Base URL set to project root
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["app/*"]  // Alias points to the app folder
     }
   },
   "include": [

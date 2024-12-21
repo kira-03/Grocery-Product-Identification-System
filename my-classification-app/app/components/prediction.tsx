@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import ModelSelection from './ModelSelection';
 
@@ -13,6 +13,20 @@ const Prediction = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  // Add ref for the results section
+  const resultsRef = useRef<HTMLDivElement>(null);
+
+  // Effect to handle scrolling when results are available
+  useEffect(() => {
+    if (predictionResult && resultsRef.current) {
+      resultsRef.current.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'center'
+      });
+    }
+  }, [predictionResult]);
 
   const getPrediction = async () => {
     if (!selectedFile) {
@@ -24,6 +38,7 @@ const Prediction = () => {
     formData.append('model', selectedModel);
     formData.append('image', selectedFile);
 
+    setIsLoading(true);
     try {
       const response = await fetch('http://localhost:8000/predict', {
         method: 'POST',
@@ -40,7 +55,13 @@ const Prediction = () => {
       setErrorMessage(null);
     } catch (error) {
       console.error('Error fetching prediction:', error);
-      setErrorMessage(`Error occurred during prediction: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setErrorMessage(
+        `Error occurred during prediction: ${
+          error instanceof Error ? error.message : 'Unknown error'
+        }`
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -58,49 +79,144 @@ const Prediction = () => {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '0 auto', textAlign: 'center', color: 'white', fontWeight: 'bold' }}>
-      {/* Animate Model Selection */}
+    <div
+      style={{
+        maxWidth: '600px',
+        margin: '0 auto',
+        textAlign: 'center',
+        padding: '25px',
+        borderRadius: '15px',
+        background: '#000000',
+        color: '#ffffff',
+        boxShadow: '0 8px 24px rgba(75, 0, 130, 0.5)',
+        border: '1px solid #800080',
+      }}
+    >
       <motion.div
-        initial={{ opacity: 0, translateY: -20 }} // Start off-screen
-        animate={{ opacity: 1, translateY: 0 }} // Slide in to position
-        exit={{ opacity: 0, translateY: -20 }} // Slide out
-        transition={{ duration: 0.5 }} // Smooth transition
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        style={{ marginBottom: '20px' }}
       >
-        <ModelSelection selectedModel={selectedModel} setSelectedModel={setSelectedModel} />
+        <p style={{ fontSize: '1.1rem', color: '#a3a3a3', fontWeight: '300' }}>
+          Upload an image and get predictions instantly!
+        </p>
       </motion.div>
 
-      {/* Image Upload Box */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ type: 'spring', stiffness: 300 }}
+        style={{
+          marginBottom: '20px',
+          padding: '20px',
+          borderRadius: '15px',
+          background: 'rgba(47, 47, 62, 0.7)',
+          boxShadow: '0 4px 20px rgba(155, 89, 182, 0.5)',
+        }}
+      >
+        <motion.h2
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          style={{
+            fontSize: '1.5rem',
+            color: '#9b59b6',
+            marginBottom: '15px',
+            fontWeight: '600',
+            textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+          }}
+        >
+          Choose Your Model
+        </motion.h2>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.5 }}
+          style={{
+            fontSize: '1rem',
+            color: '#a3a3a3',
+            marginBottom: '20px',
+            fontWeight: '300',
+            letterSpacing: '0.5px',
+          }}
+        >
+          Select a model to get the best predictions tailored to your needs!
+        </motion.p>
+
+        <motion.div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '15px',
+            flexWrap: 'wrap',
+          }}
+        >
+          {['resnet50', 'mobilenet_v2', 'densenet169'].map((model) => (
+            <motion.button
+              key={model}
+              onClick={() => setSelectedModel(model)}
+              whileHover={{
+                scale: 1.1,
+                boxShadow: '0 5px 15px rgba(155, 89, 182, 0.6)',
+              }}
+              whileTap={{
+                scale: 0.98,
+                background: 'linear-gradient(to right, #9b59b6, #8e44ad)', // Color change on click
+              }}
+              transition={{ duration: 0.01 }}  // Faster hover transition
+              style={{
+                padding: '10px 20px',
+                borderRadius: '25px',
+                border: selectedModel === model ? '2px solid #9b59b6' : 'none',
+                background:
+                  selectedModel === model
+                    ? 'linear-gradient(to right, #9b59b6, #8e44ad)' // Selected model's color
+                    : 'rgba(47, 47, 62, 0.8)', // Non-selected button background
+                color: '#ffffff',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                fontWeight: '500',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 3px 10px rgba(0, 0, 0, 0.2)',
+              }}
+            >
+              {model.toUpperCase()}
+            </motion.button>
+          ))}
+        </motion.div>
+
+      </motion.div>
+
       <motion.div
         style={{
           marginTop: '20px',
           width: '100%',
-          height: '200px',
-          border: '2px dashed white',
-          borderRadius: '10px',
+          height: '250px',
+          border: '2px dashed rgba(155, 89, 182, 0.5)',
+          borderRadius: '15px',
           overflow: 'hidden',
-          position: 'relative',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           cursor: 'pointer',
+          background: 'rgba(47, 47, 62, 0.7)',
         }}
-        whileHover={{ borderColor: '#000', scale: 1.05 }} // Change hover border color to black
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
-        transition={{ type: 'spring', stiffness: 300 }}
+        whileHover={{ borderColor: '#9b59b6', scale: 1.02 }}
         onClick={() => document.getElementById('file-input')?.click()}
       >
         {imagePreview ? (
           <motion.img
             src={imagePreview}
             alt="Selected"
-            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-            whileHover={{ scale: 1.1 }} // Scale effect on hover
-            transition={{ duration: 0.3 }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            whileHover={{ scale: 1.1 }}
           />
         ) : (
-          <p className="text-white font-bold text-1xl">Click to upload an image</p> // Increased font size
+          <p style={{ fontSize: '1.1rem', color: '#a3a3a3', fontWeight: '300' }}>
+            Click to upload an image
+          </p>
         )}
 
         <input
@@ -112,87 +228,99 @@ const Prediction = () => {
         />
       </motion.div>
 
-      {/* Conditionally Render Predict Button */}
-      {imagePreview && (
-        <motion.button
-          onClick={getPrediction}
-          initial={{ opacity: 0, translateY: 20 }} // Start below
-          animate={{ opacity: 1, translateY: 0 }} // Slide in
-          exit={{ opacity: 0, translateY: 20 }} // Slide out
-          transition={{ duration: 0.5, type: 'spring', stiffness: 300 }} // Smooth transition
+      {isLoading ? (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
           style={{
             marginTop: '20px',
-            padding: '12px 24px', // Adjusted padding
-            backgroundColor: 'black', // Changed to black
-            color: '#fff',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-            width: '100%',
-            fontWeight: 'bold', // Make button text bold
-            fontSize: '1.2rem', // Increased button text size
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#9b59b6',
           }}
-          whileHover={{ backgroundColor: '#333' }} // Darker shade on hover
         >
-          Predict
-        </motion.button>
+          <motion.div
+            style={{
+              width: '50px',
+              height: '50px',
+              border: '5px solid rgba(155, 89, 182, 0.3)',
+              borderTop: '5px solid #9b59b6',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite',
+            }}
+          />
+          <style>{`
+            @keyframes spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+          `}</style>
+        </motion.div>
+      ) : (
+        imagePreview && (
+          <motion.button
+            onClick={getPrediction}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            style={{
+              marginTop: '20px',
+              padding: '12px 24px',
+              background: 'linear-gradient(to right, #9b59b6, #8e44ad)',
+              color: '#ffffff',
+              border: 'none',
+              borderRadius: '25px',
+              fontSize: '1rem',
+              fontWeight: '600',
+              cursor: 'pointer',
+              boxShadow: '0 4px 15px rgba(155, 89, 182, 0.5)',
+            }}
+          >
+            Predict
+          </motion.button>
+        )
       )}
 
-      {/* Error Message Animation */}
       {errorMessage && (
         <motion.div
-          style={{ color: 'red', marginTop: '10px' }}
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
-          transition={{ duration: 0.5 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          style={{
+            marginTop: '15px',
+            color: '#e74c3c',
+            fontSize: '1rem',
+            fontWeight: '400',
+          }}
         >
-          <p style={{ color: 'red', fontWeight: 'bold', fontSize: '1.1rem' }}>{errorMessage}</p> {/* Increased error message size */}
+          {errorMessage}
         </motion.div>
       )}
 
-      {/* Prediction Result Animation */}
       {predictionResult && (
         <motion.div
-        style={{ marginTop: '20px' }}
-        initial={{ opacity: 0, translateY: -20 }} // Start off-screen
-        animate={{ opacity: 1, translateY: 0 }} // Slide in to position
-        exit={{ opacity: 0, translateY: -20 }} // Slide out
-        transition={{ duration: 0.5 }} // Smooth transition
-      >
-        <h3 style={{ margin: '0', fontSize: '1.5em', color: 'white' }}>Prediction Result:</h3>
-        <div style={{ backgroundColor: 'black', padding: '8px', borderRadius: '10px' }}> {/* Smaller borderRadius and padding */}
-          <motion.p
-            initial={{ opacity: 0, translateY: 10 }} // Start below
-            animate={{ opacity: 1, translateY: 0 }} // Fade and slide up
-            exit={{ opacity: 0, translateY: 10 }} // Fade and slide down
-            transition={{ duration: 0.5, delay: 0.2 }} // Delay for emphasis
-            style={{
-              margin: '5px 0',
-              color: 'white', // Set text color to white
-              fontWeight: 'bold',
-              fontSize: '1.2rem', // Increased font size
-            }}
-          >
-            Predicted Class: <span style={{ color: 'white' }}>{predictionResult.predictedClass}</span> {/* Keep span color white */}
-          </motion.p>
-        </div>
-     
-      
-          <motion.p
-            initial={{ opacity: 0, translateY: 10 }} // Start below
-            animate={{ opacity: 1, translateY: 0 }} // Fade and slide up
-            exit={{ opacity: 0, translateY: 10 }} // Fade and slide down
-            transition={{ duration: 0.5, delay: 0.4 }} // Delay for emphasis
-            style={{
-              margin: '5px 0',
-              color: 'white', // Set to plain white
-              fontWeight: 'bold',
-              fontSize: '1.2rem', // Increased font size
-            }}
-          >
-            Confidence: <span style={{ color: 'white' }}>{predictionResult.confidence.toFixed(2)}</span> {/* Change span color to white */}
-          </motion.p>
+          ref={resultsRef}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          style={{
+            marginTop: '25px',
+            padding: '15px',
+            borderRadius: '10px',
+            background: 'rgba(47, 47, 62, 0.7)',
+            color: '#ffffff',
+          }}
+        >
+          <p style={{ marginBottom: '10px', fontSize: '1.2rem', fontWeight: '600' }}>
+            Prediction Result:
+          </p>
+          <p style={{ fontSize: '1rem', fontWeight: '400' }}>
+            <strong>Class:</strong> {predictionResult.predictedClass}
+          </p>
+          <p style={{ fontSize: '1rem', fontWeight: '400' }}>
+            <strong>Confidence:</strong> {(predictionResult.confidence * 100).toFixed(2)}%
+          </p>
         </motion.div>
       )}
     </div>
