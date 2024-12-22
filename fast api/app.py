@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import logging
 import numpy as np
+from huggingface_hub import hf_hub_download
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.applications.resnet50 import preprocess_input as resnet_preprocess
@@ -28,45 +29,36 @@ app.add_middleware(
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# File paths
-base_path = r"D:\Github Repos\Grocery-Product-Identification-System\fast api\models"
-
-
-
-model_paths = {
-    'resnet50': os.path.join(base_path, 'resnet50_model.keras'),
-    'densenet169': os.path.join(base_path, 'densenet169_model.keras'),
-    'mobilenet_v2': os.path.join(base_path, 'mobilenet_v2_model.keras')
+# Hugging Face repository details
+HUGGING_FACE_REPO = "kira03/GroceryGo"
+MODEL_FILES = {
+    "resnet50": "resnet50_model.keras",
+    "densenet169": "densenet169_model.keras",
+    "mobilenet_v2": "mobilenet_v2_model.keras",
 }
-class_indices_path = os.path.join(base_path, 'dataset-details.json')
+CLASS_INDICES_FILE = "dataset-details.json"
 
-# Check if files exist
-for model_name, path in model_paths.items():
-    if not os.path.exists(path):
-        raise FileNotFoundError(f"Model file not found: {path}")
-if not os.path.exists(class_indices_path):
-    raise FileNotFoundError(f"Class indices file not found: {class_indices_path}")
-
-# Load the trained models
+# Download models and class indices from Hugging Face
 models = {}
-for model_name, path in model_paths.items():
-    logger.info(f"Loading model {model_name} from {path}")
+for model_name, model_filename in MODEL_FILES.items():
+    logger.info(f"Downloading {model_name} from Hugging Face...")
     try:
-        models[model_name] = tf.keras.models.load_model(path)
+        model_path = hf_hub_download(repo_id=HUGGING_FACE_REPO, filename=model_filename)
+        models[model_name] = tf.keras.models.load_model(model_path)
         logger.info(f"Model {model_name} loaded successfully")
     except Exception as e:
-        logger.error(f"Failed to load model {model_name}: {str(e)}")
-        raise
+        logger.error(f"Failed to download or load {model_name}: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error loading {model_name}: {str(e)}")
 
-# Load class indices
-logger.info(f"Loading class indices from {class_indices_path}")
+logger.info(f"Downloading class indices from Hugging Face...")
 try:
-    with open(class_indices_path, 'r') as f:
+    class_indices_path = hf_hub_download(repo_id=HUGGING_FACE_REPO, filename=CLASS_INDICES_FILE)
+    with open(class_indices_path, "r") as f:
         class_indices = json.load(f)
     logger.info(f"Loaded {len(class_indices)} classes")
 except Exception as e:
-    logger.error(f"Failed to load class indices: {str(e)}")
-    raise
+    logger.error(f"Failed to download class indices: {str(e)}")
+    raise HTTPException(status_code=500, detail="Error loading class indices")
 
 def predict_image(image, model_name, class_indices):
     model = models[model_name]
