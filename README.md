@@ -71,7 +71,7 @@ Open `http://localhost:3000` in your browser
 
 ## 🤝 Contributing
 
-We welcome contributions! Feel free to:
+I welcome contributions! Feel free to:
 - Fork the repository
 - Create issues
 - Submit pull requests
