@@ -1,91 +1,77 @@
 # Grocery Product Identification System
 
-This project serves as a **base model** for an image-based grocery product identification system. It leverages pre-trained **TensorFlow models** (ResNet50, MobileNetV2, and DenseNet169) to classify images of grocery products with high accuracy. We developed this base model out of our interest and fascination with concepts like **Amazon Go** and other automated systems. Our goal was to explore the potential of integrating computer vision and machine learning into real-world applications like automatic stock refilling and seamless payments.
+An advanced image-based grocery product identification system using pre-trained TensorFlow models (ResNet50, MobileNetV2, and DenseNet169). Inspired by Amazon Go, this project combines computer vision and machine learning for automated stock monitoring and seamless payments.
 
-## Features
+## 🚀 Features
 
-- **Full-Stack Application**: Includes both the frontend and backend, providing an end-to-end solution for grocery product identification.
-- **TensorFlow Models**: Uses advanced models (ResNet50, MobileNetV2, and DenseNet169) to classify images and predict the correct product.
-- **Image Processing**: Optimized image preprocessing for fast and accurate predictions.
-- **FastAPI Backend**: A FastAPI server that serves the models and handles all predictions.
-- **React Frontend**: A simple, user-friendly interface that allows easy image uploads and model selection.
+- **End-to-End Full-Stack Solution**: React frontend with FastAPI backend
+- **Pre-trained TensorFlow Models**: ResNet50, MobileNetV2, and DenseNet169 for high-accuracy classification
+- **Optimized Image Processing**: Combined OpenCV and PIL for efficient preprocessing
+- **Custom Model Selection**: Multiple models for tailored predictions based on accuracy/speed needs
 
-## Demo
+## 🌐 Demo
 
-Check out the live demo of the system in action:
+Click the image below to watch the live demo:
 
-[![Grocery Product Identification System Demo](https://img.youtube.com/vi/S112_SrtCnQ/0.jpg)](https://youtu.be/S112_SrtCnQ)
+[![Demo Thumbnail](https://github.com/kira-03/Grocery-Product-Identification-System/blob/main/my-classification-app/Landing%20Page.png)](https://youtu.be/S112_SrtCnQ)
 
-## Usage
+## 💻 Installation & Setup
 
-### Running the Application
+### 1. Clone Repository
+```bash
+git clone https://github.com/kira-03/Grocery-Product-Identification-System.git
+cd Grocery-Product-Identification-System
+```
 
-1. **Clone the Repository**:
-    ```bash
-    git clone https://github.com/kira-03/Grocery-Product-Identification-System.git
-    cd Grocery-Product-Identification-System
-    ```
+### 2. Backend Setup (FastAPI)
+```bash
+pip install -r requirements.txt
+uvicorn app:app --reload
+```
 
-2. **Backend Setup (FastAPI)**:
-   - Install required dependencies:
-     ```bash
-     pip install -r requirements.txt
-     ```
-   - Run the FastAPI backend:
-     ```bash
-     uvicorn app:app --reload
-     ```
+### 3. Frontend Setup (React)
+```bash
+cd my-classification-app
+npm install
+npm start
+```
 
-3. **Frontend Setup (React)**:
-   - Navigate to the frontend directory and install dependencies:
-     ```bash
-     cd my-classification-app
-     npm install
-     ```
-   - Start the React application:
-     ```bash
-     npm start
-     ```
+### 4. Access Application
+Open `http://localhost:3000` in your browser
 
-4. Open your browser and visit `http://localhost:3000` to interact with the app.
+## 🔄 Workflow
 
-### Workflow
+1. **Select Model**: Choose between ResNet50, MobileNetV2, or DenseNet169
+2. **Upload Image**: Submit grocery product image for prediction
+3. **View Results**: See predicted class and confidence score
 
-- **Select a Model**: Choose from ResNet50, MobileNetV2, or DenseNet169 for image classification.
-- **Upload an Image**: Upload a photo of a grocery product to receive predictions.
-- **View Prediction**: The predicted class and confidence score will be displayed.
+## 🛠️ Technology Stack
 
-## Features to Explore
+### Frontend
+- **React.js**: Interactive user interface
+- **Tailwind CSS**: Modern, responsive styling
+- **Framer Motion**: Fluid animations
 
-This system is designed as a **base model** with plenty of potential for expansion. As we were inspired by advanced concepts like **Amazon Go** and other automated store systems, we believe this base model can be evolved into more advanced functionalities such as:
+### Backend
+- **FastAPI**: High-performance framework
+- **TensorFlow**: Machine learning models
+- **OpenCV & PIL**: Image preprocessing
 
-- **Stock Refilling**: With product identification, the system can be adapted to monitor inventory levels, automatically triggering stock refills when products run low.
-- **Automatic Payment**: Inspired by Amazon Go, we envision integrating a system where products are recognized as customers pick them, and the payment process is automated as they leave the store.
+## 🌟 Extended Features
 
-These advanced features require further development and refinement, but this base model is a crucial starting point.
+- **Stock Monitoring & Refill**: Automated inventory tracking and restocking
+- **Automated Payments**: Seamless checkout through product recognition
+- **Inventory Management**: Real-time stock level monitoring
 
-## Technologies Used
+## 🚧 Future Enhancements
 
-- **Frontend**: 
-  - React.js for the user interface
-  - Tailwind CSS for styling
-  - Framer Motion for animations
-  
-- **Backend**:
-  - FastAPI for a fast and efficient backend
-  - TensorFlow for machine learning models and predictions
-  - OpenCV for image preprocessing
-  - PIL (Python Imaging Library) for image handling
+- Automated inventory monitoring with reorder triggers
+- Seamless checkout system implementation
+- Enhanced model accuracy with advanced architectures
 
-## Future Enhancements
+## 🤝 Contributing
 
-As a **base model**, this project has a lot of room for enhancement:
-
-- **Stock Monitoring & Refill**: Integrating the product identification system with inventory management to automatically reorder products when stock levels are low.
-- **Automated Payment System**: Creating a seamless checkout experience where customers are charged automatically as they leave the store, based on product identification.
-
-We’re excited about these possibilities and will continue to explore how the system can be extended to achieve these advanced functionalities.
-
-## Contributing
-
-Feel free to fork the repository, submit issues, or create pull requests. If you’re interested in enhancing the project or exploring any of the ideas above, we welcome your contributions!
+We welcome contributions! Feel free to:
+- Fork the repository
+- Create issues
+- Submit pull requests
