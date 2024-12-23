@@ -10,6 +10,12 @@ This project serves as a **base model** for an image-based grocery product ident
 - **FastAPI Backend**: A FastAPI server that serves the models and handles all predictions.
 - **React Frontend**: A simple, user-friendly interface that allows easy image uploads and model selection.
 
+## Demo
+
+Check out the live demo of the system in action:
+
+[![Grocery Product Identification System Demo](https://img.youtube.com/vi/S112_SrtCnQ/0.jpg)](https://youtu.be/S112_SrtCnQ)
+
 ## Usage
 
 ### Running the Application
@@ -70,7 +76,7 @@ These advanced features require further development and refinement, but this bas
   - TensorFlow for machine learning models and predictions
   - OpenCV for image preprocessing
   - PIL (Python Imaging Library) for image handling
-  
+
 ## Future Enhancements
 
 As a **base model**, this project has a lot of room for enhancement:
