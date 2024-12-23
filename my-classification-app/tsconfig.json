@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
-    "target": "ES2015", 
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "ES2015",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -14,10 +18,17 @@
     "jsx": "preserve",
     "incremental": true,
     "downlevelIteration": true,
-    "baseUrl": ".",  // Base URL set to project root
+    "baseUrl": ".", // Base URL set to project root
     "paths": {
-      "@/*": ["app/*"]  // Alias points to the app folder
-    }
+      "@/*": [
+        "app/*"
+      ] // Alias points to the app folder
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
     "next-env.d.ts",
@@ -26,5 +37,7 @@
     ".next/types/**/*.ts",
     "@types/**/*.d.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }
